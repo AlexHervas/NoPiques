@@ -1,31 +1,35 @@
 import { useState } from "react";
+import Header from "./components/Header";
+import MessageInput from "./components/messageInput";
+import AnalyzeButton from "./components/AnalyzeButton";
+import AnalysisResult from "./components/AnalysisResult";
+import Footer from "./components/Footer";
 
-function App() {
-  const [text, setText] = useState("");
+export default function App() {
+  const [message, setMessage] = useState("");
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAnalyze = async () => {
     setLoading(true);
+    setError("");
+    setResult("");
 
     try {
-      const response = await fetch("http://localhost:4000/api/analyze", {
+      const res = await fetch("http://localhost:4000/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ message }),
       });
 
-      const data = await response.json();
+      if (!res.ok) throw new Error("Error en el análisis");
 
-      if (response.ok) {
-        setResult(data.result);
-      } else {
-        setError(data.error || "Error inesperado");
-      }
+      const data = await res.json();
+      setResult(data.result || "No se recibió respuesta.");
     } catch (err) {
-      setError("Error de red o servidor.");
+      console.error(err);
+      setError("Error al analizar el mensaje. Intenta de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -33,46 +37,26 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100 text-gray-800">
-      {/* Header */}
-      <header className="bg-indigo-600 text-white py-4 shadow">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-3xl font-bold">NoPiques 🛡️</h1>
-          <p className="text-sm text-indigo-200">
-            Detecta mensajes sospechosos de phishing
-          </p>
-        </div>
-      </header>
+      <Header />
 
-      {/* Main */}
       <main className="container mx-auto px-4 py-10 flex-grow">
         <div className="max-w-2xl mx-auto space-y-6">
-          {/* Textarea */}
-          <textarea
-            className="w-full h-40 p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
-            placeholder="Pega aquí el mensaje que quieres analizar..."
+          <MessageInput message={message} onChange={setMessage} />
+          <AnalyzeButton
+            onclick={handleAnalyze}
+            disabled={!message.trim() || loading}
           />
-
-          {/* Botón */}
-          <button className="w-full bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-indigo-700 transition">
-            Analizar mensaje
-          </button>
-
-          {/* Resultado (placeholder por ahora) */}
-          <div className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm text-gray-700">
-            Aquí aparecerá el resultado del análisis.
-          </div>
+          {loading && (
+            <div className="text-center text-indigo-500 font-semibold animate-pulse">
+              Analizando mensaje...
+            </div>
+          )}
+          {error && <div className="text-red-500 font-semibold">{error}</div>}
+          <AnalysisResult result={result} />
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-200 py-4">
-        <div className="container mx-auto px-4 text-center text-sm text-gray-600">
-          © {new Date().getFullYear()} NoPiques — Protegiendo a los usuarios del
-          phishing.
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
-
-export default App;
