@@ -33,7 +33,7 @@ function App() {
 
   return (
     <main style={{ maxWidth: 600, margin: "auto", padding: 20 }}>
-      <h1>NoPiques 🛡️</h1>
+      <h1 className="text-4xl bg-amber-600">NoPiques 🛡️</h1>
       <p>Introduce el mensaje sospechoso que quieras analizar:</p>
 
       <form onSubmit={handleSubmit}>
