@@ -13,7 +13,7 @@ app.post("/api/analyze", async (req, res) => {
   try {
     const { text } = req.body;
     const result = await analyzeMessage(text);
-    res.json({ result });
+    res.json(result);
   } catch (error) {
     console.error("Error analyzing message:", error);
     res.status(500).json({ error: "Error al analizar el mensaje" });
