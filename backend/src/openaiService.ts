@@ -7,9 +7,11 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const model = process.env.OPENAI_MODEL || "gpt-3.5-turbo";
+
 export const analyzeMessage = async (text: string): Promise<string> => {
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o",
+    model,
     messages: [
       {
         role: "system",
