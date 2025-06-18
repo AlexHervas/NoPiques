@@ -5,16 +5,21 @@ import AnalyzeButton from "./components/AnalyzeButton";
 import AnalysisResult from "./components/AnalysisResult";
 import Footer from "./components/Footer";
 
+type Analysis = {
+  level: "danger" | "safe" | "neutral" | "uncertain";
+  result: string;
+};
+
 export default function App() {
   const [message, setMessage] = useState("");
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleAnalyze = async () => {
     setLoading(true);
     setError("");
-    setResult("");
+    setResult(null);
 
     try {
       const res = await fetch("http://localhost:4000/api/analyze", {
@@ -25,8 +30,9 @@ export default function App() {
 
       if (!res.ok) throw new Error("Error en el análisis");
 
-      const data = await res.json();
-      setResult(data.result || "No se recibió respuesta.");
+      const data: Analysis = await res.json();
+      console.log("🔍 API RESPONSE:", data);
+      setResult(data);
     } catch (err) {
       console.error(err);
       setError("Error al analizar el mensaje. Intenta de nuevo.");
@@ -52,7 +58,9 @@ export default function App() {
             </div>
           )}
           {error && <div className="text-red-500 font-semibold">{error}</div>}
-          <AnalysisResult result={result} />
+          {result && (
+            <AnalysisResult level={result.level} result={result.result} />
+          )}
         </div>
       </main>
 
