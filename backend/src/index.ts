@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import { analyzeMessage } from "./ollamaService";
+import { analyzeMessageOpenAI } from "./openaiService";
 
 dotenv.config();
 
@@ -11,8 +11,8 @@ app.use(express.json());
 
 app.post("/api/analyze", async (req, res) => {
   try {
-    const { text } = req.body;
-    const result = await analyzeMessage(text);
+    const { message } = req.body;
+    const result = await analyzeMessageOpenAI(message);
     res.json(result);
   } catch (error) {
     console.error("Error analyzing message:", error);

@@ -31,7 +31,6 @@ export default function App() {
       if (!res.ok) throw new Error("Error en el análisis");
 
       const data: Analysis = await res.json();
-      console.log("🔍 API RESPONSE:", data);
       setResult(data);
     } catch (err) {
       console.error(err);
