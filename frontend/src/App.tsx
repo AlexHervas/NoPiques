@@ -1,35 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [text, setText] = useState("");
+  const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:4000/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setResult(data.result);
+      } else {
+        setError(data.error || "Error inesperado");
+      }
+    } catch (err) {
+      setError("Error de red o servidor.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <main style={{ maxWidth: 600, margin: "auto", padding: 20 }}>
+      <h1>NoPiques 🛡️</h1>
+      <p>Introduce el mensaje sospechoso que quieras analizar:</p>
+
+      <form onSubmit={handleSubmit}>
+        <textarea
+          rows={8}
+          style={{ width: "100%", marginBottom: 10 }}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Ejemplo: Estimado cliente, su cuenta ha sido bloqueada..."
+        />
+        <button type="submit" disabled={loading || !text}>
+          {loading ? "Analizando..." : "Analizar"}
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      </form>
+
+      {result && (
+        <div style={{ marginTop: 20 }}>
+          <h3>Resultado del análisis:</h3>
+          <pre style={{ whiteSpace: "pre-wrap" }}>{result}</pre>
+        </div>
+      )}
+
+      {error && (
+        <div style={{ marginTop: 20, color: "red" }}>
+          <strong>Error:</strong> {error}
+        </div>
+      )}
+    </main>
+  );
 }
 
-export default App
+export default App;
