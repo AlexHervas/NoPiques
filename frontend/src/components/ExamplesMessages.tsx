@@ -3,16 +3,13 @@ import {
   CheckCircle,
   HelpCircle,
   MessageSquare,
+  ShieldQuestion,
 } from "lucide-react";
 import type { JSX } from "react";
+import type { AnalysisLevel, Example } from "../types";
 
 type Props = {
   onSelect: (message: string) => void;
-};
-
-type Example = {
-  text: string;
-  level: "danger" | "safe" | "neutral";
 };
 
 const examples: Example[] = [
@@ -22,7 +19,7 @@ const examples: Example[] = [
   },
   {
     text: "Hola, soy María del equipo de soporte. ¿Pudiste resolver el problema?",
-    level: "neutral",
+    level: "uncertain",
   },
   {
     text: "La nueva versión de la aplicación está disponible en la tienda oficial. Actualiza para seguir disfrutando del servicio.",
@@ -30,16 +27,18 @@ const examples: Example[] = [
   },
 ];
 
-const levelStyles: Record<Example["level"], string> = {
+const levelStyles: Record<AnalysisLevel, string> = {
   danger: "bg-red-100 text-red-800 border-red-200",
   safe: "bg-green-100 text-green-800 border-green-200",
   neutral: "bg-gray-100 text-gray-800 border-gray-300",
+  uncertain: "bg-yellow-100 text-yellow-800 border-yellow-200",
 };
 
-const levelIcons: Record<Example["level"], JSX.Element> = {
+const levelIcons: Record<AnalysisLevel, JSX.Element> = {
   danger: <AlertCircle size={16} />,
   safe: <CheckCircle size={16} />,
   neutral: <HelpCircle size={16} />,
+  uncertain: <ShieldQuestion size={16} />,
 };
 
 export default function ExampleMessages({ onSelect }: Props) {
