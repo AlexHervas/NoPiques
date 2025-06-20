@@ -4,6 +4,8 @@ import MessageInput from "./components/messageInput";
 import AnalyzeButton from "./components/AnalyzeButton";
 import AnalysisResult from "./components/AnalysisResult";
 import Footer from "./components/Footer";
+import ExampleMessages from "./components/ExamplesMessages";
+import LoadingOverlay from "./components/LoadingOverlay";
 
 type Analysis = {
   level: "danger" | "safe" | "neutral" | "uncertain";
@@ -32,6 +34,7 @@ export default function App() {
 
       const data: Analysis = await res.json();
       setResult(data);
+      console.log("Resultado del análisis:", data);
     } catch (err) {
       console.error(err);
       setError("Error al analizar el mensaje. Intenta de nuevo.");
@@ -41,11 +44,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100 text-gray-800">
+    <div className="min-h-screen flex flex-col bg-gray-100 text-gray-800 relative overflow-hidden">
+      {loading && <LoadingOverlay />}
+
       <Header />
 
-      <main className="container mx-auto px-4 py-10 flex-grow">
+      <main className="flex-grow px-4 py-10 sm:px-6 md:px-8">
         <div className="max-w-2xl mx-auto space-y-6">
+          <ExampleMessages onSelect={(msg) => setMessage(msg)} />
           <MessageInput message={message} onChange={setMessage} />
           <AnalyzeButton
             onclick={handleAnalyze}
