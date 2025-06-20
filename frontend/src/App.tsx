@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import MessageInput from "./components/messageInput";
 import AnalyzeButton from "./components/AnalyzeButton";
@@ -6,17 +6,25 @@ import AnalysisResult from "./components/AnalysisResult";
 import Footer from "./components/Footer";
 import ExampleMessages from "./components/ExamplesMessages";
 import LoadingOverlay from "./components/LoadingOverlay";
-
-type Analysis = {
-  level: "danger" | "safe" | "neutral" | "uncertain";
-  result: string;
-};
+import AnalysisHistory from "./components/AnalysisHistory";
+import type { Analysis, AnalysisWithMessage } from "./types";
 
 export default function App() {
   const [message, setMessage] = useState("");
   const [result, setResult] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [history, setHistory] = useState<AnalysisWithMessage[]>(() => {
+    const savedHistory = localStorage.getItem("analysisHistory");
+    return savedHistory ? JSON.parse(savedHistory) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      "analysisHistory",
+      JSON.stringify(history.slice(0, 10))
+    );
+  }, [history]);
 
   const handleAnalyze = async () => {
     setLoading(true);
@@ -35,6 +43,7 @@ export default function App() {
       const data: Analysis = await res.json();
       setResult(data);
       console.log("Resultado del análisis:", data);
+      setHistory((prev) => [{ message, ...data }, ...prev.slice(0, 9)]);
     } catch (err) {
       console.error(err);
       setError("Error al analizar el mensaje. Intenta de nuevo.");
@@ -65,6 +74,9 @@ export default function App() {
           {error && <div className="text-red-500 font-semibold">{error}</div>}
           {result && (
             <AnalysisResult level={result.level} result={result.result} />
+          )}
+          {history.length > 0 && (
+            <AnalysisHistory history={history} onClear={() => setHistory([])} />
           )}
         </div>
       </main>
