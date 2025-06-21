@@ -6,14 +6,16 @@ type AnalysisResultProps = {
 };
 
 const baseClasses =
-  "p-4 rounded-xl transition-all duration-300 min-h-[80px] text-sm animate-fade-in";
+  "p-4 rounded-xl transition-all duration-300 min-h-[80px] text-sm animate-fade-in border dark:border-gray-700";
 
 const styles: Record<AnalysisLevel, string> = {
-  danger: "bg-red-100 border-red-300 text-red-800 shadow-red-200",
-  safe: "bg-green-100 border-green-300 text-green-800 shadow-green-200",
-  neutral: "bg-gray-100 border-gray-300 text-gray-700 shadow-gray-200",
+  danger:
+    "bg-red-100 border-red-300 text-red-800 shadow-red-200 dark:bg-red-950 dark:border-red-700 dark:text-red-100",
+  safe: "bg-green-100 border-green-300 text-green-800 shadow-green-200 dark:bg-green-950 dark:border-green-700 dark:text-green-100",
+  neutral:
+    "bg-gray-100 border-gray-300 text-gray-700 shadow-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100",
   uncertain:
-    "bg-yellow-100 border-yellow-300 text-yellow-800 shadow-yellow-200",
+    "bg-yellow-100 border-yellow-300 text-yellow-800 shadow-yellow-200 dark:bg-yellow-950 dark:border-yellow-600 dark:text-yellow-100",
 };
 
 const icons: Record<AnalysisLevel, string> = {

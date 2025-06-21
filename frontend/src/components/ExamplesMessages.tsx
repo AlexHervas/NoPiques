@@ -28,10 +28,13 @@ const examples: Example[] = [
 ];
 
 const levelStyles: Record<AnalysisLevel, string> = {
-  danger: "bg-red-100 text-red-800 border-red-200",
-  safe: "bg-green-100 text-green-800 border-green-200",
-  neutral: "bg-gray-100 text-gray-800 border-gray-300",
-  uncertain: "bg-yellow-100 text-yellow-800 border-yellow-200",
+  danger:
+    "bg-red-100 dark:bg-red-800/20 text-red-800 dark:text-red-300 border-red-200 dark:border-red-600",
+  safe: "bg-green-100 dark:bg-green-800/20 text-green-800 dark:text-green-300 border-green-200 dark:border-green-600",
+  neutral:
+    "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-300 dark:border-gray-600",
+  uncertain:
+    "bg-yellow-100 dark:bg-yellow-800/20 text-yellow-800 dark:text-yellow-300 border-yellow-200 dark:border-yellow-600",
 };
 
 const levelIcons: Record<AnalysisLevel, JSX.Element> = {
@@ -43,8 +46,8 @@ const levelIcons: Record<AnalysisLevel, JSX.Element> = {
 
 export default function ExampleMessages({ onSelect }: Props) {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border">
-      <h2 className="text-sm font-semibold text-gray-600 mb-3 flex items-center gap-2">
+    <div className="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 transition-colors">
+      <h2 className="text-sm font-semibold text-gray-600 dark:text-gray-200 mb-3 flex items-center gap-2">
         <MessageSquare size={16} />
         Prueba con un mensaje rápido:
       </h2>
