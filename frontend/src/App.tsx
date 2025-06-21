@@ -18,6 +18,25 @@ export default function App() {
     const savedHistory = localStorage.getItem("analysisHistory");
     return savedHistory ? JSON.parse(savedHistory) : [];
   });
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const root = document.documentElement;
+    console.log(document.documentElement.classList);
+    if (darkMode) {
+      root.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      root.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
   useEffect(() => {
     localStorage.setItem(
@@ -42,7 +61,6 @@ export default function App() {
 
       const data: Analysis = await res.json();
       setResult(data);
-      console.log("Resultado del análisis:", data);
       setHistory((prev) => [{ message, ...data }, ...prev.slice(0, 9)]);
     } catch (err) {
       console.error(err);
@@ -53,10 +71,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100 text-gray-800 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 relative overflow-hidden">
       {loading && <LoadingOverlay />}
 
-      <Header />
+      <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       <main className="flex-grow px-4 py-10 sm:px-6 md:px-8">
         <div className="max-w-2xl mx-auto space-y-6">
