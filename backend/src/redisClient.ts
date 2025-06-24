@@ -1,4 +1,17 @@
 import { createClient } from "redis";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+if (
+  !process.env.REDIS_HOST ||
+  !process.env.REDIS_PORT ||
+  !process.env.REDIS_PASSWORD
+) {
+  throw new Error(
+    "Missing required environment variables for Redis connection"
+  );
+}
 
 const client = createClient({
   socket: {
