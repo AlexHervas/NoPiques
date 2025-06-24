@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { analyzeMessageOpenAI } from "./openaiService";
 import client from "./redisClient";
+import { rateLimiter } from "./middlewares/rateLimiter";
 
 dotenv.config();
 
@@ -25,7 +26,7 @@ app.use(express.json());
   }
 })();
 
-app.post("/api/analyze", async (req, res) => {
+app.post("/api/analyze", rateLimiter, async (req, res) => {
   try {
     const { message } = req.body;
     const result = await analyzeMessageOpenAI(message);
