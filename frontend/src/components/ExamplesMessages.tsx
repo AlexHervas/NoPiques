@@ -25,6 +25,10 @@ const examples: Example[] = [
     text: "La nueva versión de la aplicación está disponible en la tienda oficial. Actualiza para seguir disfrutando del servicio.",
     level: "safe",
   },
+  {
+    text: "Hola soy María, ¿Cómo estás, qué tal te va todo? Un saludo.",
+    level: "neutral",
+  },
 ];
 
 const levelStyles: Record<AnalysisLevel, string> = {
