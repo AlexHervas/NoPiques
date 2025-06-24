@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
-import MessageInput from "./components/messageInput";
+import MessageInput from "./components/MessageInput";
 import AnalyzeButton from "./components/AnalyzeButton";
 import AnalysisResult from "./components/AnalysisResult";
 import Footer from "./components/Footer";
@@ -57,6 +57,15 @@ export default function App() {
         body: JSON.stringify({ message }),
       });
 
+      if (res.status === 429) {
+        const data = await res.json();
+        setError(
+          data.error ||
+            "Has alcanzado el límite diario de análisis. Vuelve mañana."
+        );
+        return;
+      }
+
       if (!res.ok) throw new Error("Error en el análisis");
 
       const data: Analysis = await res.json();
@@ -89,7 +98,18 @@ export default function App() {
               Analizando mensaje...
             </div>
           )}
-          {error && <div className="text-red-500 font-semibold">{error}</div>}
+          {error && (
+            <div className="relative flex justify-center items-center gap-2 p-4 rounded-lg border border-red-300 bg-red-50 dark:border-red-500 dark:bg-red-800/20 text-red-700 dark:text-red-200 shadow-sm">
+              <span className="text-lg">⚠️</span>
+              <span className="text-sm text-center">{error}</span>
+              <button
+                onClick={() => setError("")}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-600 dark:hover:text-red-300 text-sm font-bold"
+              >
+                X
+              </button>
+            </div>
+          )}
           {result && (
             <AnalysisResult level={result.level} result={result.result} />
           )}
