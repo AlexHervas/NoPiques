@@ -2,12 +2,28 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import { analyzeMessageOpenAI } from "./openaiService";
+import client from "./redisClient";
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+(async () => {
+  try {
+    await client.connect();
+    console.log("Redis connected successfully");
+
+    const PORT = process.env.PORT || 4000;
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("Error while connecting with Redis:", error);
+    process.exit(1);
+  }
+})();
 
 app.post("/api/analyze", async (req, res) => {
   try {
@@ -18,9 +34,4 @@ app.post("/api/analyze", async (req, res) => {
     console.error("Error analyzing message:", error);
     res.status(500).json({ error: "Error al analizar el mensaje" });
   }
-});
-
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
 });
