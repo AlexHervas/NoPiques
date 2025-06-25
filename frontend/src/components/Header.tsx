@@ -1,4 +1,4 @@
-import { Moon, Sun } from "lucide-react";
+import { Moon, ShieldCheck, Sun } from "lucide-react";
 
 type Props = {
   darkMode: boolean;
@@ -10,7 +10,10 @@ export default function Header({ darkMode, toggleDarkMode }: Props) {
     <header className="relative bg-indigo-600 dark:bg-indigo-700 text-white py-6 shadow transition-colors">
       <div className="container mx-auto px-4 flex justify-center items-center">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-white">NoPiques 🛡️</h1>
+          <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-2">
+            <ShieldCheck className="w-8 h-8" />
+            NoPiques
+          </h1>
           <p className="text-sm text-indigo-200 dark:text-indigo-100">
             Detecta mensajes sospechosos de phishing
           </p>
