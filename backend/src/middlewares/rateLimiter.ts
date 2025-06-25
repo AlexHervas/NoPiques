@@ -7,7 +7,8 @@ export const rateLimiter = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const ip = req.ip;
+    const ip =
+      req.headers["x-forwarded-for"]?.toString().split(",")[0].trim() || req.ip;
     const redisKey = `analyze_count:${ip}`;
 
     const current = await client.get(redisKey);
