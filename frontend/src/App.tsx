@@ -27,6 +27,16 @@ export default function App() {
   };
 
   useEffect(() => {
+    if (loading) {
+      document.title = "Analizando mensaje...";
+    } else if (result) {
+      document.title = "✅ Análisis completado | NoPiques";
+    } else {
+      document.title = "NoPiques - Detector de Phishing";
+    }
+  }, [loading, result]);
+
+  useEffect(() => {
     const root = document.documentElement;
     console.log(document.documentElement.classList);
     if (darkMode) {
