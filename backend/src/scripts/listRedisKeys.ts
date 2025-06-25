@@ -8,19 +8,20 @@ import client from "../redisClient";
     const keys = await client.keys(pattern);
 
     if (keys.length === 0) {
-      console.log("No se encontraron claves con el patrón:", pattern);
+      console.log("No hay claves activas con el patrón:", pattern);
     } else {
-      console.log("Claves encontradas:", keys);
+      console.log("Claves encontradas:\n");
+
       for (const key of keys) {
-        await client.del(key);
-        console.log(`Clave eliminada: ${key}`);
+        const value = await client.get(key);
+        console.log(`${key} => ${value}`);
       }
     }
 
     await client.quit();
-    console.log("Conexión cerrada.");
+    console.log("\n Conexión cerrada.");
   } catch (err) {
-    console.error("Error al limpiar claves:", err);
+    console.error("Error al listar claves:", err);
     process.exit(1);
   }
 })();
