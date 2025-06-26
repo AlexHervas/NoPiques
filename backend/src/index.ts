@@ -37,3 +37,8 @@ app.post("/api/analyze", rateLimiter, async (req, res) => {
     res.status(500).json({ error: "Error al analizar el mensaje" });
   }
 });
+
+// Endpoint para prevenir el cold start de render.com
+app.get("/api/ping", (req, res) => {
+  res.status(200).json({ status: "ok", message: "pong" });
+});
