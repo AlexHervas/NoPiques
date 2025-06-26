@@ -26,7 +26,7 @@ const examples: Example[] = [
     level: "safe",
   },
   {
-    text: "Hola soy María, ¿Cómo estás, qué tal te va todo? Un saludo.",
+    text: "Hola soy Antonio, ¿Cómo estás, qué tal te va todo? Un saludo.",
     level: "neutral",
   },
 ];
