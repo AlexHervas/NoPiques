@@ -57,6 +57,8 @@ export const analyzeMessageOpenAI = async (
 Ten en cuenta:
 - El simple hecho de mencionar bancos, buzones o servicios NO implica que sea phishing.
 - Considera el tono general, urgencia injustificada, faltas ortográficas o gramaticales, y enlaces sospechosos.
+- Si el mensaje es legítimo, informativo y no contiene señales de alarma, clasifícalo como 'safe'.
+- Usa 'neutral' si el mensaje es ambiguo o poco informativo pero no sugiere intención maliciosa.
 - Si el mensaje parece legítimo pero no se puede verificar con certeza, clasifícalo como 'uncertain'.
 
 ${domainInfo}
