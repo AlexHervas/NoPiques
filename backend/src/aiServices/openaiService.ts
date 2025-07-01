@@ -47,20 +47,26 @@ export const analyzeMessageOpenAI = async (
       )}. Evalúalos también.`
     : "El mensaje no contiene enlaces.";
 
-  const prompt = `Eres un experto en ciberseguridad. Evalúa el siguiente mensaje y responde exclusivamente con un JSON como este:
+  const prompt = `Eres un analista experto en ciberseguridad. Evalúa el siguiente mensaje recibido por un usuario (SMS, WhatsApp, email, etc.) y responde exclusivamente en formato JSON con una de las siguientes categorías de riesgo:
 
-{
-  "level": "danger" | "safe" | "neutral" | "uncertain",
-  "result": "explicación breve en español"
-}
+- "danger": Mensaje con intención clara de phishing, engaño, fraude o suplantación de identidad.
+- "uncertain": El mensaje parece sospechoso o ambiguo, pero no hay pruebas concluyentes para afirmar que sea malicioso.
+- "neutral": Es un mensaje cotidiano o genérico, sin signos de riesgo ni información sensible.
+- "safe": El mensaje proviene de una fuente confiable o trata temas legítimos sin señales de riesgo.
 
 Ten en cuenta:
 - El simple hecho de mencionar bancos, buzones o servicios NO implica que sea phishing.
 - Considera el tono general, urgencia injustificada, faltas ortográficas o gramaticales, y enlaces sospechosos.
-- Si no hay señales claras, considera el mensaje como 'neutral' o 'uncertain'.
 - Si el mensaje parece legítimo pero no se puede verificar con certeza, clasifícalo como 'uncertain'.
 
 ${domainInfo}
+
+Responde exclusivamente con un JSON como este:
+
+{
+  "level": "danger" | "uncertain" | "neutral" | "safe",
+  "result": "explicación breve en español"
+}
 
 Mensaje:
 """${message}"""`;
