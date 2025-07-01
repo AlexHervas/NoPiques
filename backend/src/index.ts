@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import { analyzeMessageOpenAI } from "./openaiService";
+import { analyzeMessageOpenAI } from "./aiServices/openaiService";
 import client from "./redisClient";
 import { rateLimiter } from "./middlewares/rateLimiter";
 
